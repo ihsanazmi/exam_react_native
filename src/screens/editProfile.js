@@ -18,10 +18,8 @@ class editProfile extends Component {
   getDetailUser=()=>{
     Axios.get(urlApi + `post/getpostbyusername?username=${this.props.username}`)
     .then(res=>{
-      // console.log(res.data.data)
-      console.log(res.data.data)
       if(res.data.data){
-        
+
         this.setState({data: res.data.data})
       }else{
         this.setState({data: 'No Post'})
