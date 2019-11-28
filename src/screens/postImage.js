@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker'
-import { Input, Button } from 'react-native-elements';
+import {Text, Input, Button } from 'react-native-elements';
 import {connect} from 'react-redux'
 import Axios from 'axios';
 import { urlApi } from '../supports/url';
+import Icon from 'react-native-vector-icons/FontAwesome'
+
 class postImage extends Component {
   state ={image : null ,caption : ''}
 
@@ -50,18 +52,27 @@ class postImage extends Component {
   render() {
     console.log(this.props.user_data)
     return (
-      <View>
-        <Text onPress={this.openCamera}> Camera </Text>
-        <Text> Gallery </Text>
-        <Image 
-          width={300}
-          height={300}
-          source ={{uri : this.state.image === null ? null : this.state.image.path }}
-        /> 
-        <Input 
-        onChangeText = {(text) => this.setState({caption:text})}
-        placeholder='Caption'
-        />
+      <View style={{alignContent:'center'}}>
+        <View style={{alignSelf:'center'}}>
+          <Text h1>Posting Image</Text>
+        </View>
+        <View style={{flexDirection:'row', justifyContent:'space-around', marginVertical:17}}>
+          <Icon onPress={this.openCamera} name='camera' size={64} />
+          <Icon onPress={this.openCamera} name='image' size={64} />
+        </View>
+        <View style={{alignSelf:'center'}}>
+          <Image 
+            width={300}
+            height={300}
+            source ={{uri : this.state.image === null ? null : this.state.image.path }}
+          /> 
+        </View>
+        <View style={{marginVertical:30}}>
+          <Input 
+          onChangeText = {(text) => this.setState({caption:text})}
+          placeholder='Caption'
+          />
+        </View>
         <Button 
         onPress={this.onBtnPostPress}
         title ='Post'

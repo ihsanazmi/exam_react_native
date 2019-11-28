@@ -4,6 +4,22 @@ import {Image,Avatar, Text} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default class post extends Component {
+
+  state ={
+    seeMore : false
+  }
+
+  onSeeMorePress = ()=>{
+    this.setState({seeMore:!this.state.seeMore})
+  }
+
+  renderSeeMore = (length)=>{
+    console.log(length)
+    if(length > 50){
+    return <Text style={{fontWeight:'bold'}} onPress={this.onSeeMorePress}>{this.state.seeMore ? '' : '...See More' }</Text>
+    }
+  }
+
   render() {
     return (
         <View style={{marginBottom:40}}>
@@ -62,8 +78,16 @@ export default class post extends Component {
         </View>
 
         {/* Captions */}
-        <View style={{flexDirection:'row',marginTop:15,paddingHorizontal:15}}>
-          <Text style={{fontWeight:'bold'}}>{this.props.username} <Text style={{fontWeight:"normal"}}>{this.props.caption}</Text></Text>
+        <View style={{flexDirection:'row',marginTop:15,paddingHorizontal:15}}> 
+          <Text style={{fontWeight:'bold'}}>{`${this.props.username} `}
+            <Text 
+              style={{fontWeight:"normal"}}
+            >
+              {this.state.seeMore  ? this.props.caption : this.props.caption.slice(0,51)} 
+              {this.renderSeeMore(this.props.caption.length)}
+              
+            </Text>
+          </Text>
         </View>
     </View>
     );

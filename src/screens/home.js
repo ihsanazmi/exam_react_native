@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Post from './../components/post'
 import { urlApi } from '../supports/url';
 import Axios from 'axios';
+import {connect} from 'react-redux'
 // const data =[
 //     {username : 'fikri' , url_foto : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQKrpS7K4U5ju_Jqtj69t2SW90P8G0yInzjmySwy-McoemFPXj0', caption : 'caption',likes : 10},
 //     {username : 'andi' , url_foto : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQKrpS7K4U5ju_Jqtj69t2SW90P8G0yInzjmySwy-McoemFPXj0', caption : 'caption',likes : 10},
@@ -14,13 +15,18 @@ import Axios from 'axios';
 // ]
 
 
-export default class home extends Component {
+class home extends Component {
   state = {data : null}
   
   componentDidMount(){
     Axios.get(urlApi + 'post/getallpost')
     .then((data) => {
-      this.setState({data:data.data.data})
+      // console.log(this.props.user)
+      let filter_home = data.data.data.filter((val)=>{
+        return val.username !== this.props.user
+        // console.log(filter_home)
+      })
+      this.setState({data:filter_home})
     })
     .catch((err) => {
       console.log(err)
@@ -28,11 +34,18 @@ export default class home extends Component {
   }
 
   filterData = (username) => {
-    var data_filtered = this.state.data.filter((val) => {
-      return val.username === username
+    Axios.get(urlApi+ `post/getpostbyusername?username=${username}`)
+    .then(res=>{
+      var data = res.data.data
+      var data_filtered = data.filter((val) => {
+        return val.username === username
+      })
+      return this.props.navigation.navigate('detail',{data : data_filtered})
+    })
+    .catch(err=>{
+      console.log(err)
     })
 
-    return this.props.navigation.navigate('detail',{data : data_filtered})
   }
 
   render() {
@@ -57,3 +70,11 @@ export default class home extends Component {
     );
   }
 }
+
+const mapStateToProps = (state)=>{
+  return{
+    user : state.users.username,
+  }
+}
+
+export default connect(mapStateToProps)(home)

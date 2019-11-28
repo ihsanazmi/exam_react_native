@@ -66,11 +66,21 @@ class Register extends Component {
                     alert(res.data.message)
                 }
                 else{
-                    AsyncStorage.setItem('data',JSON.stringify({email,username}),(err) => {
-                        if(err) return alert(err.message)
-                        this.props.onRegisterSuccess({email,username})
-                        alert(res.data.message)
+
+                    Axios.post(urlApi + 'auth/login', {username, password})
+                    .then((res)=>{
+                        console.log(res.data.data[0].id)
+                        let id = res.data.data[0].id
+                        let foto_profile = res.data.data[0].foto_profile
+                        AsyncStorage.setItem('data',JSON.stringify({email,username, id, foto_profile}),(err) => {
+                            if(err) return alert(err.message)
+                            this.props.onRegisterSuccess({email,username, id, foto_profile})
+                            alert(res.data.message)
+                        })
+                    }).catch(err=>{
+                        console.log(err)
                     })
+                    
                 }
             })
             .catch((err) => {
@@ -113,6 +123,7 @@ class Register extends Component {
 
     componentDidUpdate(){
         if(this.props.user){
+            // console.log(this.props.user)
             const reset_stack = StackActions.reset({
                 index : 0,
                 actions : [NavigationActions.navigate({routeName:'home'})]

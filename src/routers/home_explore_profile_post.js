@@ -7,6 +7,7 @@ import explore from '../screens/explore'
 import postImage from '../screens/postImage'
 import editProfile from '../screens/editProfile'
 import ProfileDetail from '../screens/profileDetail'
+import postDetail from '../screens/postDetail'
 import { createStackNavigator } from 'react-navigation-stack'
 
 
@@ -17,7 +18,20 @@ const Home_to_Profile= createAppContainer(createStackNavigator({
     headerMode :"none"
 }))
 
+const Explore_to_postDetail= createAppContainer(createStackNavigator({
+    explore: explore,
+    postDetail: postDetail,
+    detail: ProfileDetail
+},{
+    headerMode:'none'
+}))
 
+// const postDetail_to_profiledetail = createAppContainer(createStackNavigator({
+//     postDetail: postDetail,
+//     detail:ProfileDetail
+// },{
+//     headerMode:'none'
+// }))
 
 
 const MainTab = createAppContainer(createMaterialTopTabNavigator(
@@ -29,7 +43,7 @@ const MainTab = createAppContainer(createMaterialTopTabNavigator(
             }
         },
         explore : {
-            screen : explore,
+            screen : Explore_to_postDetail,
             navigationOptions : {
                 tabBarIcon : <Icon name='search' size={24} />
             }

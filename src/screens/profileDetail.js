@@ -2,12 +2,32 @@ import React, { Component } from 'react';
 import { View,ScrollView } from 'react-native';
 import {Header,Left,Body,Icon,Container,Right} from 'native-base'
 import {Avatar,Text,Image} from 'react-native-elements'
+import {urlApi} from '../supports/url'
+
+
 export default class profileDetail extends Component {
     state = {data : null}
     componentDidMount(){
         var data = this.props.navigation.getParam('data')
+        // console.log(data)
         this.setState({data : data})
     }
+
+    renderPhoto = ()=>{
+        let foto = this.state.data.map((val)=>{
+            return (
+                <View style={{width:`${100/3}%`,height:120,}}>
+                    <Image 
+                            source={{uri : urlApi + `${val.foto_url}`}}
+                            style={{ width: '100%',height:'100%'}}
+                        />
+                </View>
+            )
+        })
+        return foto
+        
+    }
+
   render() {
     if(this.state.data === null){
         return(
@@ -21,7 +41,7 @@ export default class profileDetail extends Component {
                     <Icon name='arrow-back' onPress={() => this.props.navigation.goBack()} />
                 </Left>
                 <Body>
-                    <Text style={{fontWeight:'bold'}}>Username </Text>
+                    <Text style={{fontWeight:'bold'}}>{this.state.data[0].username} </Text>
                 </Body>
                 <Right>
                 </Right>
@@ -34,7 +54,7 @@ export default class profileDetail extends Component {
                     size={100}
                     rounded
                     source={{
-                        uri:'http://apiinstagrinjc.herokuapp.com/public/posts/POS1574734597340.jpeg',
+                        uri:urlApi +'public/profile/default.png',
                     }}
                     />
                 </View>
@@ -55,21 +75,14 @@ export default class profileDetail extends Component {
             
             {/* Container User Info */}
             <View style={{marginTop:15,paddingHorizontal:15}}>
-                <Text style={{fontWeight:'bold'}}> Username </Text>
+                <Text style={{fontWeight:'bold'}}> {this.state.data[0].username} </Text>
                 <Text> User Bio </Text>
             </View>
             
             {/* List Foto */}
             <ScrollView style={{borderTopWidth:1,borderTopColor:'grey',marginTop:15}}>
                 <View style={{flexDirection:'row',flexWrap:'wrap'}}>
-                    <View style={{width:`${100/3}%`,height:120,}}>
-                        <Image 
-                                source={{uri : 'http://apiinstagrinjc.herokuapp.com/public/posts/POS1574734597340.jpeg'}}
-                                style={{ width: '100%',height:'100%'}}
-                            />
-                    </View>
-                    
-                    
+                    {this.renderPhoto()}
                 </View>
                 
             </ScrollView>
